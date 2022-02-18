@@ -1,4 +1,4 @@
-import { useState, } from "react";
+import { useState } from "react";
 import {
   sanityClient,
   urlFor,
@@ -7,23 +7,25 @@ import {
 } from "../../lib/sanity";
 
 const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
-    _id,
-    name,
-    slug,
-    mainImage,
-    ingredient[]{
+      _id,
+      name,
+      slug,
+      mainImage,
+      ingredient[]{
         _key,
         unit,
         wholeNumber,
         fraction,
-        ingredient-> {
-            name
+        ingredient->{
+          name
         }
-    },
-    instructions
-}`;
+      },
+      instructions,
+      likes
+    }`;
 
 export default function OneRecipe({ data, preview }) {
+  if (!data) return <div>Loading...</div>;
   const { data: recipe } = usePreviewSubscription(recipeQuery, {
     params: { slug: data.recipe?.slug.current },
     initialData: data,
