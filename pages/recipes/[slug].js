@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import {
   sanityClient,
@@ -25,7 +26,6 @@ const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
     }`;
 
 export default function OneRecipe({ data, preview }) {
-  if (!data) return <div>Loading...</div>;
   const { data: recipe } = usePreviewSubscription(recipeQuery, {
     params: { slug: data.recipe?.slug.current },
     initialData: data,
@@ -86,7 +86,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   };
 }
 
